@@ -1,82 +1,61 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
 import { useState, useEffect } from 'react';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
-
-const URL = 'ws://localhost:8000';
-const client = new W3CWebSocket(URL);
-
+import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
+import Link from 'next/link';
+import axios from 'axios';
 export default function Home() {
-  const [user, setUser] = useState();
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [ws, setWs] = useState(client);
+  const {
+    placesService,
+    placePredictions,
+    getPlacePredictions,
+    isPlacePredictionsLoading,
+  } = usePlacesService({
+    apiKey: 'AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0',
+  });
+  const [value, setValue] = useState('');
+  const [products, setProducts] = useState([]);
 
-  // const { sendMessage, lastMessage, readyState } = useWebSocket(ws);
+  const handleSearch = async (e) => {
+    e.preventDefault();
 
-  const submitMessage = () => {
-    // const message = { user: usr, message: msg };
-    client.send(JSON.stringify({ type: 'message', msg: message, usr: user }));
-    setMessages([...messages]);
-    // store message in local storage
-    // localStorage.setItem('messages', JSON.stringify([...messages]));
+    const res = await axios.get(
+      `http://localhost:4000/api/search-property?q=${value}`
+    );
+
+    setProducts(res.data);
+    console.log(res.data);
   };
 
-  useEffect(() => {
-    client.onopen = () => {
-      console.log('WebSocket Connected');
-    };
-
-    client.onmessage = (message) => {
-      const dataFromServer = message.data;
-      console.log('got reply! ', dataFromServer);
-      setMessages([...messages, dataFromServer]);
-      console.log('messages', messages);
-    };
-  }, []);
+  // console.log(products);
 
   return (
     <>
       <main>
-        <div>
-          <label htmlFor="user">
-            Name :
-            <input
-              type="text"
-              id="user"
-              placeholder="User"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-            />
-          </label>
-
-          <ul>
-            {messages.map((message, index) => (
-              <li key={index}>
-                <b>{user}</b>: <em>{message.msg}</em>
-              </li>
-            ))}
-          </ul>
-
-          <form
-            action=""
-            onSubmit={(e) => {
-              e.preventDefault();
-              submitMessage();
-              // setMessage([]);
-            }}
-          >
-            <input
-              type="text"
-              placeholder={'Type a message ...'}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <input type="submit" value={'Send'} />
-          </form>
-        </div>
+        <form onSubmit={(e) => handleSearch(e)}>
+          Search
+          <input
+            placeholder="Search property"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            // loading={isPlacePredictionsLoading}
+          />
+          <button type="submit">search</button>
+        </form>
+        <Link href="/create-property">
+          <div>+ add property</div>
+        </Link>
+        {products.length == 0 ? (
+          <p>No result</p>
+        ) : (
+          products?.map((item) => {
+            console.log(item);
+            return (
+              <ul key={item._id}>
+                <li>{item?.title}</li>
+                <small>{item?.address?.name}</small>
+              </ul>
+            );
+          })
+        )}
       </main>
     </>
   );

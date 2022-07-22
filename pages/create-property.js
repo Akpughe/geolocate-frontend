@@ -20,6 +20,7 @@ const CreateProperty = () => {
       name: '',
     },
   });
+  const [success, setSuccess] = useState('');
 
   const { title, address } = formData;
 
@@ -46,11 +47,20 @@ const CreateProperty = () => {
       formData
     );
     console.log(res.data);
+    setSuccess('sucessfully added');
+    setFormData({
+      title: '',
+      address: {
+        placeId: '',
+        name: '',
+      },
+    });
   };
 
   console.log(formData);
   return (
     <div>
+      {success}
       <form onSubmit={(e) => handleSubmit(e)}>
         <h1>Create Property</h1>
 
