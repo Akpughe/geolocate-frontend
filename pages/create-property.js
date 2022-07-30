@@ -94,7 +94,7 @@ const CreateProperty = () => {
             loading={isPlacePredictionsLoading}
           />
           {placePredictions.map((item) => {
-            // console.log(item.description);
+            // console.log(item);
             return (
               <ul>
                 <li onClick={() => handleSelect(item)}>
