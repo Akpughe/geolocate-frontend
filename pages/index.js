@@ -134,7 +134,7 @@ export default function Home() {
 
   useEffect(() => {
     // getFromGoogle();
-    setPredictions(placePredictions);
+    // setPredictions(placePredictions);
   }, []);
 
   return (
