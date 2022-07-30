@@ -20,6 +20,7 @@ export default function Home() {
   const [location, setLocation] = useState('');
   const [products, setProducts] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState('');
+  const [currentData, setCurrentData] = useState();
 
   const getLocationFromGoogle = async (props) => {
     const { params, onFinish } = props;
@@ -84,29 +85,38 @@ export default function Home() {
     }
   };
 
-  const getCoordinate = (options) => {
+  const getCoordinate = (placeId) => {
 
     getLocationFromGoogle({
       params: {
-        place_id: currentPlaceId,
+        place_id: placeId,
+      },
+      onFinish: (data) => {
+        // if (onFinish) onFinish(data);
+        setCurrentData(data)
+        // console.log(currentData)
       },
     });
-    // console.log('coord', data);
-
+    console.log('coord', currentData);
   };
+
+  let currentLng =currentData?.results[0]?.geometry?.location?.lng;
+  let currentLat =currentData?.results[0]?.geometry?.location?.lat; 
 
   const handleSearch = async (e) => {
     e.preventDefault();
 
-    // router.push({
-    //   pathname: '/',
-    //   query: {
-    //     q: value,
-    //   },
-    // });
+    router.push({
+      pathname: '/',
+      query: {
+        q: value,
+        longitude: currentLng,
+        latitude: currentLat,
+      },
+    });
 
     const res = await axios.get(
-      `http://localhost:4000/api/search-property?q=${value}`
+      `http://localhost:4000/api/search-property?q=${value}&longitude=${currentLng}&latitude=${currentLat}`
     );
 
     setProducts(res.data);
@@ -115,8 +125,8 @@ export default function Home() {
 
   const handleSelect = (place) => {
     setCurrentPlaceId(place.place_id);
-
-    getCoordinate();
+    setValue(place.structured_formatting.main_text)
+    getCoordinate(place.place_id);
   };
 
   console.log('placeId', currentPlaceId);
@@ -134,11 +144,29 @@ export default function Home() {
             <input
               placeholder="Search property"
               value={value}
-              onChange={(e) => setValue(e.target.value)}
+              // onChange={(e) => setValue(e.target.value)}
               // loading={isPlacePredictionsLoading}
+              onChange={(evt) => {
+                getPlacePredictions({
+                  input: evt.target.value,
+                  componentRestrictions: { country: 'ng' },
+                });
+                setValue(evt.target.value);
+              }}
+              loading={isPlacePredictionsLoading}
             />
+            {placePredictions.map((item) => {
+              console.log(item);
+              return (
+                <ul>
+                  <li onClick={() => handleSelect(item)}>
+                    {item?.structured_formatting?.main_text}
+                  </li>
+                </ul>
+              );
+            })}
           </label>
-          <label htmlFor="">
+          {/* <label htmlFor="">
             What location are you looking at?
             <input
               placeholder="Enter location"
@@ -163,7 +191,7 @@ export default function Home() {
                 </ul>
               );
             })}
-          </label>
+          </label> */}
           <button type="submit">search</button>
         </form>
         <Link href="/create-property">
