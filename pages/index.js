@@ -21,6 +21,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState('');
   const [currentData, setCurrentData] = useState();
+  const [show, setShow] = useState(false);
 
   const getLocationFromGoogle = async (props) => {
     const { params, onFinish } = props;
@@ -86,26 +87,25 @@ export default function Home() {
   };
 
   const getCoordinate = (placeId) => {
-
     getLocationFromGoogle({
       params: {
         place_id: placeId,
       },
       onFinish: (data) => {
         // if (onFinish) onFinish(data);
-        setCurrentData(data)
+        setCurrentData(data);
         // console.log(currentData)
       },
     });
     console.log('coord', currentData);
   };
 
-  let currentLng =currentData?.results[0]?.geometry?.location?.lng;
-  let currentLat =currentData?.results[0]?.geometry?.location?.lat; 
+  let currentLng = currentData?.results[0]?.geometry?.location?.lng;
+  let currentLat = currentData?.results[0]?.geometry?.location?.lat;
 
   const handleSearch = async (e) => {
     e.preventDefault();
-
+    setShow(false);
     router.push({
       pathname: '/',
       query: {
@@ -125,37 +125,48 @@ export default function Home() {
 
   const handleSelect = (place) => {
     setCurrentPlaceId(place.place_id);
-    setValue(place.structured_formatting.main_text)
+    setValue(place.structured_formatting.main_text);
     getCoordinate(place.place_id);
+    setShow(false);
   };
 
   console.log('placeId', currentPlaceId);
 
-  // useEffect(() => {
-  //   getFromGoogle();
-  // }, []);
+  useEffect(() => {
+    // getFromGoogle();
+    setPredictions(placePredictions);
+  }, []);
 
   return (
     <>
       <main>
-        <form onSubmit={(e) => handleSearch(e)}>
-          <label htmlFor="">
-            Search
-            <input
-              placeholder="Search property"
-              value={value}
-              // onChange={(e) => setValue(e.target.value)}
-              // loading={isPlacePredictionsLoading}
-              onChange={(evt) => {
-                getPlacePredictions({
-                  input: evt.target.value,
-                  componentRestrictions: { country: 'ng' },
-                });
-                setValue(evt.target.value);
-              }}
-              loading={isPlacePredictionsLoading}
-            />
-            {placePredictions.map((item) => {
+        <div className="flex">
+          <form onSubmit={(e) => handleSearch(e)}>
+            <label htmlFor="">
+              Search
+              <input
+                placeholder="Search property"
+                value={value}
+                // onChange={(e) => setValue(e.target.value)}
+                // loading={isPlacePredictionsLoading}
+                onChange={(evt) => {
+                  setShow(true);
+                  getPlacePredictions({
+                    input: evt.target.value,
+                    componentRestrictions: { country: 'ng' },
+                  });
+                  setValue(evt.target.value);
+                }}
+                loading={isPlacePredictionsLoading}
+              />
+            </label>
+            <button type="submit">search</button>
+          </form>
+          <Link href="/create-property">
+            <div>+ add property</div>
+          </Link>
+          {show &&
+            placePredictions.map((item) => {
               console.log(item);
               return (
                 <ul>
@@ -165,50 +176,30 @@ export default function Home() {
                 </ul>
               );
             })}
-          </label>
-          {/* <label htmlFor="">
-            What location are you looking at?
-            <input
-              placeholder="Enter location"
-              value={location}
-              // onChange={(e) => setLocation(e.target.location)}
-              onChange={(evt) => {
-                getPlacePredictions({
-                  input: evt.target.value,
-                  componentRestrictions: { country: 'ng' },
-                });
-                setLocation(evt.target.location);
-              }}
-              loading={isPlacePredictionsLoading}
-            />
-            {placePredictions.map((item) => {
-              // console.log(item);
-              return (
-                <ul>
-                  <li onClick={() => handleSelect(item)}>
-                    {item?.structured_formatting?.main_text}
-                  </li>
-                </ul>
-              );
-            })}
-          </label> */}
-          <button type="submit">search</button>
-        </form>
-        <Link href="/create-property">
-          <div>+ add property</div>
-        </Link>
+        </div>
+        {products.length > 0 ? <h1>{value} Real Estate {'&'} Homes For Sale</h1>:''  }
         {products.length == 0 ? (
           <p>No result</p>
         ) : (
           products?.map((item) => {
             console.log(item);
+            // let firstWord = item.structured_formatting.main_text.split(' ')[0];
+            console.log(value);
             return (
-              <ul key={item._id}>
-                <li>{item?.title}</li>
-                <small>{item?.address?.name}</small>
-              </ul>
+              <div>
+                <ul key={item._id}>
+                  <li>{item?.title}</li>
+                  <li>
+                    <small>{item?.address?.name}</small>
+                  </li>
+                  <li>
+                    <small>{Math.round(item?.distance)} miles away from you</small>
+                  </li>
+                </ul>
+              </div>
             );
           })
+
         )}
       </main>
     </>
