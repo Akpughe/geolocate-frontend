@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Wrapper, Status } from '@googlemaps/react-wrapper';
-import { createCustomEqual } from 'fast-equals';
 import GoogleMapReact from 'google-map-react';
 import { FaMapMarker } from 'react-icons/fa';
+import Link from 'next/link';
 
 const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0`;
 
@@ -81,11 +80,12 @@ const Property = ({ property }) => {
   };
 
   function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
 
   return (
     <div>
+      <Link href={`/`}>go back</Link>
       <div style={{ height: '500px', width: '500px' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0' }}
@@ -101,7 +101,9 @@ const Property = ({ property }) => {
       </div>
       <div>
         <h1>{numberWithCommas(property.price)} naira</h1>
-        <small>{property.bedroom} bd | {property.bathroom} ba | {property.sqft} sqft</small>
+        <small>
+          {property.bedroom} bd | {property.bathroom} ba | {property.sqft} sqft
+        </small>
       </div>
       <div>
         <p>{property.address.name}</p>
