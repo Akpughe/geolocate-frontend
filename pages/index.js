@@ -130,6 +130,10 @@ export default function Home() {
     setShow(false);
   };
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
   console.log('placeId', currentPlaceId);
 
   useEffect(() => {
@@ -183,12 +187,13 @@ export default function Home() {
         ) : (
           products?.map((item) => {
             console.log(item);
+            let id = item._id
             // let firstWord = item.structured_formatting.main_text.split(' ')[0];
             console.log(value);
             return (
-              <div>
-                <ul key={item._id}>
-                  <li>{item?.title}</li>
+              <Link href={`/property/${id}`}>
+                <ul className='cursor-pointer' key={item._id}>
+                  <li className="font-bold text-xl">{numberWithCommas(item?.price)} naira</li>
                   <li>
                     <small>{item?.address?.name}</small>
                   </li>
@@ -196,7 +201,7 @@ export default function Home() {
                     <small>{Math.round(item?.distance)} miles away from you</small>
                   </li>
                 </ul>
-              </div>
+              </Link>
             );
           })
 
