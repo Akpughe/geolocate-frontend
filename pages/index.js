@@ -139,146 +139,79 @@ export default function Home() {
     // getFromGoogle();
     // setPredictions(placePredictions);
   }, []);
+  const optionsWrapperClassName =
+    'absolute top-14 overflow-auto bg-white rounded-md shadow-dropdown max-h-60 focus:outline-none divide-y divide-secondary divide-opacity-10 w-[16.5375rem]';
 
   return (
     <>
       <Navbar />
-      <Search
-        handleSearch={(e) => handleSearch(e)}
-        value={value}
-        onChange={(evt) => {
-          setShow(true);
-          getPlacePredictions({
-            input: evt.target.value,
-            componentRestrictions: { country: 'ng' },
-          });
-          setValue(evt.target.value);
-        }}
-        loading={isPlacePredictionsLoading}
-      />
-
-      <div className="relative">
-      {show &&
-          placePredictions.map((item) => {
-            console.log(item);
-            return (
-              <ul>
-                <li onClick={() => handleSelect(item)}>
-                  {item?.structured_formatting?.main_text}
-                </li>
-              </ul>
-            );
-          })}
+      <div className="relative w-full">
+        <Search
+          handleSearch={(e) => handleSearch(e)}
+          value={value}
+          onChange={(evt) => {
+            setShow(true);
+            getPlacePredictions({
+              input: evt.target.value,
+              componentRestrictions: { country: 'ng' },
+            });
+            setValue(evt.target.value);
+          }}
+          loading={isPlacePredictionsLoading}
+        />
+        <div className="sm:px-10 px-5">
+          <div className={`${optionsWrapperClassName} z-30 bg-gray-100 `}>
+            {show &&
+              placePredictions.map((item) => {
+                console.log(item);
+                return (
+                  <ul className="py-2 px-3 hover:bg-gray-50">
+                    <li
+                      onClick={() => handleSelect(item)}
+                      className=" cursor-pointer"
+                    >
+                      {item?.structured_formatting?.main_text}
+                    </li>
+                  </ul>
+                );
+              })}
+          </div>
+        </div>
       </div>
 
       <div className="sm:px-10 px-5 py-10 w-full">
         <div class="flex w-full space-x-10">
-          <div class="card_container sm:m-0 m-auto">{/* card here */}
-          <div>
-            {products.length > 0 ? (
-              <h1 className="text-3xl font-bold mb-8">
-                {value} Real Estate {'&'} Homes For Sale
-              </h1>
-            ) : (
-              ''
-            )}
-            {products.length == 0 ? (
-              <p className="text-3xl font-bold">No result</p>
-            ) : (
-              products?.map((item) => {
-                console.log(item);
-                let id = item._id;
-                // console.log(value);
-                return (
-                  <Link href={`/property/${id}`}>
-                    <PropertyCard {...products} product={item}/>
-                    {/* <ul className="cursor-pointer" key={item._id}>
-                      <li className="font-bold text-xl">
-                        {numberWithCommas(item?.price)} naira
-                      </li>
-                      <li>
-                        <small>{item?.address?.name}</small>
-                      </li>
-                      <li>
-                        <small>
-                          {Math.round(item?.distance)} miles away from you
-                        </small>
-                      </li>
-                    </ul> */}
-                  </Link>
-                );
-              })
-            )}
+          <div class="card_container sm:m-0 m-auto">
+            {/* card here */}
+            <div>
+              {products.length > 0 ? (
+                <h1 className="text-3xl font-bold mb-8">
+                  {value} Real Estate {'&'} Homes For Sale
+                </h1>
+              ) : (
+                ''
+              )}
+              {products.length == 0 ? (
+                <p className="text-3xl font-bold">No result </p>
+              ) : (
+                products?.map((item) => {
+                  console.log(item);
+                  let id = item._id;
+                  // console.log(value);
+                  return (
+                    <PropertyCard
+                      key={item._id}
+                      {...products}
+                      product={item}
+                      id={item._id}
+                    />
+                  );
+                })
+              )}
+            </div>
           </div>
-          </div>
-
-      
         </div>
       </div>
-
-      {/* <main>
-        <div className="flex">
-          <form onSubmit={(e) => handleSearch(e)}>
-            <label htmlFor="">
-              Search
-              <input
-                placeholder="Search property"
-                value={value}
-                // onChange={(e) => setValue(e.target.value)}
-                // loading={isPlacePredictionsLoading}
-                onChange={(evt) => {
-                  setShow(true);
-                  getPlacePredictions({
-                    input: evt.target.value,
-                    componentRestrictions: { country: 'ng' },
-                  });
-                  setValue(evt.target.value);
-                }}
-                loading={isPlacePredictionsLoading}
-              />
-            </label>
-            <button type="submit">search</button>
-          </form>
-          <Link href="/create-property">
-            <div>+ add property</div>
-          </Link>
-          {show &&
-            placePredictions.map((item) => {
-              console.log(item);
-              return (
-                <ul>
-                  <li onClick={() => handleSelect(item)}>
-                    {item?.structured_formatting?.main_text}
-                  </li>
-                </ul>
-              );
-            })}
-        </div>
-        {products.length > 0 ? <h1>{value} Real Estate {'&'} Homes For Sale</h1>:''  }
-        {products.length == 0 ? (
-          <p>No result</p>
-        ) : (
-          products?.map((item) => {
-            console.log(item);
-            let id = item._id
-            console.log(value);
-            return (
-              <Link href={`/property/${id}`}>
-                <ul className='cursor-pointer' key={item._id}>
-                  <li className="font-bold text-xl">{numberWithCommas(item?.price)} naira</li>
-                  <li>
-                    <small>{item?.address?.name}</small>
-                  </li>
-                  <li>
-                    <small>{Math.round(item?.distance)} miles away from you</small>
-                  </li>
-                </ul>
-              </Link>
-            );
-          })
-
-        )}
-      </main> */}
     </>
   );
 }

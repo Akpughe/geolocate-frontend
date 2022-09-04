@@ -36,7 +36,7 @@ const Search = ({handleSearch, value, onChange, loading}) => {
         </div>
       </form>
 
-      <div className="w-full text-sm">map view switch</div>
+      <div className="w-full text-sm sm:block hidden">map view switch</div>
     </div>
   )
 }

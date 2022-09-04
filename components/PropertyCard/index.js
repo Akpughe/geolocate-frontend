@@ -1,8 +1,10 @@
 import React from 'react';
 import { numberWithCommas } from '../../utilities';
-const PropertyCard = ({ product }) => {
+import Link from 'next/link';
+const PropertyCard = ({ product, id }) => {
   return (
-    <div class="relative bg-white rounded-2xl shadow-xl sm:max-w-[18rem] max-w-none">
+    <Link href={`/property/${id}`}>
+    <div class="relative bg-white rounded-2xl shadow-xl sm:max-w-[18rem] max-w-none cursor-pointer">
       <div class="">
         <div class="flex justify-between w-full absolute py-3 px-4">
           <div class="flex space-x-2">
@@ -22,8 +24,11 @@ const PropertyCard = ({ product }) => {
         />
       </div>
       <div class="py-2 px-4">
-        <p class="font-semibold text-gray-800 text-xl">$ {numberWithCommas(product?.price)}</p>
+        <p class="font-semibold text-gray-800 text-xl">
+          $ {numberWithCommas(product?.price)}
+        </p>
         <p class="text-sm text-gray-500 py-1">{product?.address?.name}</p>
+        <small>{Math.round(product?.distance)} miles away from you</small>
         <div class="flex space-x-2 py-2">
           <div class="flex space-x-2 w-full bg-[#f3f3f3] p-2 rounded-md-2 text-sm">
             room
@@ -37,6 +42,7 @@ const PropertyCard = ({ product }) => {
         </div>
       </div>
     </div>
+    </Link>
   );
 };
 
