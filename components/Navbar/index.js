@@ -1,35 +1,34 @@
 import React from 'react';
-
+import Link from 'next/link'
 const Navbar = () => {
   return (
     <nav className="flex items-center justify-between w-full p-10">
       <div className="flex items-center space-x-40">
-        <div className="font-bold text-2xl capitalize">real estate</div>
+        <Link href="/">
+        <div className="font-bold text-2xl capitalize cursor-pointer">real estate</div>
+        </Link>
         <ul className="sm:flex hidden space-x-10 capitalize">
           <li className="">
             <a
-              className="text-gray-700 font-normal text-sm hover:border-b-2 hover:border-b-blue-700 focus:text-blue-700 focus:border-b-blue-700"
-              href="#"
+              className="text-gray-700 cursor-pointer font-normal text-sm hover:border-b-2 hover:border-b-blue-700 focus:text-blue-700 focus:border-b-blue-700"
             >
               search
             </a>
           </li>
           <li>
-            <a className="text-gray-700 font-normal text-sm hover:border-b-2 hover:border-b-blue-700">
+            <a className="text-gray-700 cursor-pointer font-normal text-sm hover:border-b-2 hover:border-b-blue-700">
               about
             </a>
           </li>
           <li>
             <a
-              href="#"
-              className="text-gray-700 font-normal text-sm hover:border-b-2 hover:border-b-blue-700"
+              className="text-gray-700 cursor-pointer font-normal text-sm hover:border-b-2 hover:border-b-blue-700"
             >
               help
             </a>
           </li>
           <li>
             <a
-              href="#"
               className="text-gray-700 font-normal text-sm hover:border-b-2 hover:border-b-blue-700"
             >
               real estate agent
@@ -38,7 +37,6 @@ const Navbar = () => {
           <li>
             <a
               className="text-gray-700 font-normal text-sm hover:border-b-2 hover:border-b-blue-700"
-              href=""
             >
               blog
             </a>
