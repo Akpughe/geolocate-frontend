@@ -3,6 +3,9 @@ import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocomplet
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Navbar from '../components/Navbar';
+import Search from '../components/Search';
+import PropertyCard from '../components/PropertyCard';
 
 const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0`;
 
@@ -130,10 +133,6 @@ export default function Home() {
     setShow(false);
   };
 
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
   console.log('placeId', currentPlaceId);
 
   useEffect(() => {
@@ -143,7 +142,81 @@ export default function Home() {
 
   return (
     <>
-      <main>
+      <Navbar />
+      <Search
+        handleSearch={(e) => handleSearch(e)}
+        value={value}
+        onChange={(evt) => {
+          setShow(true);
+          getPlacePredictions({
+            input: evt.target.value,
+            componentRestrictions: { country: 'ng' },
+          });
+          setValue(evt.target.value);
+        }}
+        loading={isPlacePredictionsLoading}
+      />
+
+      <div className="relative">
+      {show &&
+          placePredictions.map((item) => {
+            console.log(item);
+            return (
+              <ul>
+                <li onClick={() => handleSelect(item)}>
+                  {item?.structured_formatting?.main_text}
+                </li>
+              </ul>
+            );
+          })}
+      </div>
+
+      <div className="sm:px-10 px-5 py-10 w-full">
+        <div class="flex w-full space-x-10">
+          <div class="card_container sm:m-0 m-auto">{/* card here */}
+          <div>
+            {products.length > 0 ? (
+              <h1 className="text-3xl font-bold mb-8">
+                {value} Real Estate {'&'} Homes For Sale
+              </h1>
+            ) : (
+              ''
+            )}
+            {products.length == 0 ? (
+              <p className="text-3xl font-bold">No result</p>
+            ) : (
+              products?.map((item) => {
+                console.log(item);
+                let id = item._id;
+                // console.log(value);
+                return (
+                  <Link href={`/property/${id}`}>
+                    <PropertyCard {...products} product={item}/>
+                    {/* <ul className="cursor-pointer" key={item._id}>
+                      <li className="font-bold text-xl">
+                        {numberWithCommas(item?.price)} naira
+                      </li>
+                      <li>
+                        <small>{item?.address?.name}</small>
+                      </li>
+                      <li>
+                        <small>
+                          {Math.round(item?.distance)} miles away from you
+                        </small>
+                      </li>
+                    </ul> */}
+                  </Link>
+                );
+              })
+            )}
+          </div>
+          </div>
+
+      
+        </div>
+      </div>
+
+      {/* <main>
         <div className="flex">
           <form onSubmit={(e) => handleSearch(e)}>
             <label htmlFor="">
@@ -188,7 +261,6 @@ export default function Home() {
           products?.map((item) => {
             console.log(item);
             let id = item._id
-            // let firstWord = item.structured_formatting.main_text.split(' ')[0];
             console.log(value);
             return (
               <Link href={`/property/${id}`}>
@@ -206,7 +278,7 @@ export default function Home() {
           })
 
         )}
-      </main>
+      </main> */}
     </>
   );
 }
