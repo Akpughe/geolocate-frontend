@@ -1,9 +1,16 @@
 import React from 'react';
 import { numberWithCommas } from '../../utilities';
 import Link from 'next/link';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
+
 const PropertyCard = ({ product, id }) => {
+  const [isFavourite, setIsFavourite] = React.useState(false);
+
+  const handleFavourite = () => {
+    setIsFavourite(!isFavourite);
+  };
+
   return (
-    <Link href={`/property/${id}`}>
     <div class="relative bg-white rounded-2xl shadow-xl sm:max-w-[18rem] max-w-none cursor-pointer">
       <div class="">
         <div class="flex justify-between w-full absolute py-3 px-4">
@@ -15,7 +22,13 @@ const PropertyCard = ({ product, id }) => {
               For sale
             </div>
           </div>
-          <div>heart</div>
+          <div onClick={handleFavourite}>
+            {isFavourite ? (
+              <MdFavorite size={20} color="red" />
+              ) : (
+              <MdFavoriteBorder size={20} color="white" />
+            )}
+          </div>
         </div>
         <img
           src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
@@ -23,26 +36,27 @@ const PropertyCard = ({ product, id }) => {
           class="rounded-2xl"
         />
       </div>
-      <div class="py-2 px-4">
-        <p class="font-semibold text-gray-800 text-xl">
-          $ {numberWithCommas(product?.price)}
-        </p>
-        <p class="text-sm text-gray-500 py-1">{product?.address?.name}</p>
-        <small>{Math.round(product?.distance)} miles away from you</small>
-        <div class="flex space-x-2 py-2">
-          <div class="flex space-x-2 w-full bg-[#f3f3f3] p-2 rounded-md-2 text-sm">
-            room
-          </div>
-          <div class="flex space-x-2 w-full bg-[#f3f3f3] p-2 rounded-md-2 text-sm">
-            bath
-          </div>
-          <div class="flex space-x-2 w-full bg-[#f3f3f3] p-2 rounded-md-2 text-sm">
-            area
+      <Link href={`/property/${id}`}>
+        <div class="py-2 px-4">
+          <p class="font-semibold text-gray-800 text-xl">
+            $ {numberWithCommas(product?.price)}
+          </p>
+          <p class="text-sm text-gray-500 py-1">{product?.address?.name}</p>
+          <small>{Math.round(product?.distance)} miles away from you</small>
+          <div class="flex space-x-2 py-2">
+            <div class="flex space-x-2 w-full bg-[#f3f3f3] p-2 rounded-md-2 text-sm">
+              room
+            </div>
+            <div class="flex space-x-2 w-full bg-[#f3f3f3] p-2 rounded-md-2 text-sm">
+              bath
+            </div>
+            <div class="flex space-x-2 w-full bg-[#f3f3f3] p-2 rounded-md-2 text-sm">
+              area
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
     </div>
-    </Link>
   );
 };
 
