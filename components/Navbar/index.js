@@ -9,7 +9,7 @@ const Navbar = () => {
   const [show, setShow] = useState(false);
 
   return (
-    <nav className="flex items-center justify-between w-full p-10">
+    <nav className="flex items-center justify-between w-full p-10 z-50">
       <div className="flex items-center space-x-40">
         <Link href="/">
           <div className="font-bold text-2xl capitalize cursor-pointer">
