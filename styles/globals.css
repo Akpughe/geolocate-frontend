@@ -36,6 +36,21 @@ select,
   outline-offset: 2px;
 }
 
+.show {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  transition: top 1s ease-in-out;
+  z-index: 99;
+  border-bottom: 1px solid #2929fe;
+
+  padding: 20px 0;
+}
+
+.map{
+  height: calc(100vh - 60px);
+}
+
 .rounded-md-2 {
   border-radius: 0.3125rem;
 }
@@ -72,7 +87,7 @@ select,
 }
 
 .map-container {
-  height: 1000px;
+  height: calc(100vh - 60px);
   width: 700px;
 
 }
