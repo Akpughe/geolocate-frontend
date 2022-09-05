@@ -6,11 +6,15 @@ import { useRouter } from 'next/router';
 import Navbar from '../components/Navbar';
 import Search from '../components/Search';
 import PropertyCard from '../components/PropertyCard';
+import TheMap from '../components/Map';
+import GoogleMapReact from 'google-map-react';
+import { FaMapMarker } from 'react-icons/fa';
 
 const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0`;
 
-export default function Home() {
+export default function Home({ property }) {
   const router = useRouter();
+  console.log('properties', property);
   const {
     placesService,
     placePredictions,
@@ -139,6 +143,30 @@ export default function Home() {
     // getFromGoogle();
     // setPredictions(placePredictions);
   }, []);
+
+  // map lng and lat from property
+  const mapLng = property?.properties?.map(
+    (item) => item.location.coordinates[0]
+  );
+  const mapLat = property?.properties?.map(
+    (item) => item.location.coordinates[1]
+  );
+
+  // console.log('coord1', mapLng, 'coord2', mapLat)
+
+  // pair mapLng and mapMat into array of objects
+  const mapCoord = mapLng?.map((item, index) => {
+    return {
+      lng: item,
+      lat: mapLat[index],
+    };
+  });
+
+  // const mapCoord = mapLng.map((item, index) => {
+  //   return [item, mapLat[index]];
+  // });
+  console.log('mapchord', property);
+
   const optionsWrapperClassName =
     'absolute top-14 overflow-auto bg-white rounded-md shadow-dropdown max-h-60 focus:outline-none divide-y divide-secondary divide-opacity-10 w-[16.5375rem]';
 
@@ -181,16 +209,16 @@ export default function Home() {
 
       <div className="sm:px-10 px-5 py-10 w-full">
         <div class="flex w-full space-x-10">
-          <div class="card_container sm:m-0 m-auto">
+          <div class="">
             {/* card here */}
-            <div>
-              {products.length > 0 ? (
+            <div class="card_container sm:m-0 m-auto">
+              {/* {products.length > 0 ? (
                 <h1 className="text-3xl font-bold mb-8">
                   {value} Real Estate {'&'} Homes For Sale
                 </h1>
               ) : (
                 ''
-              )}
+              )} */}
               {products.length == 0 ? (
                 <p className="text-3xl font-bold">No result </p>
               ) : (
@@ -199,19 +227,36 @@ export default function Home() {
                   let id = item._id;
                   // console.log(value);
                   return (
-                    <PropertyCard
-                      key={item._id}
-                      {...products}
-                      product={item}
-                      id={item._id}
-                    />
+                    <div className="">
+                      <PropertyCard
+                        key={item._id}
+                        {...products}
+                        product={item}
+                        id={item._id}
+                      />
+                    </div>
                   );
                 })
               )}
             </div>
+          </div>
+          {/* map */}
+          <div className="map flex justify-center h-full">
+           {products.length > 0 && <TheMap property={property} />}
           </div>
         </div>
       </div>
     </>
   );
 }
+
+export const getServerSideProps = async ({ params }) => {
+  let property;
+  // get pro on build
+  const { data } = await axios.get(`http://localhost:4000/api/get-property`);
+  property = data;
+
+  // console.log(property);
+  // Pass post data to the page via props
+  return { props: { property } };
+};
