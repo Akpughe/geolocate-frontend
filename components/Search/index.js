@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import { Switch } from '@headlessui/react'
 
-const Search = ({handleSearch, value, onChange, loading}) => {
-  const [enabled, setEnabled] = useState(true)
-
+const Search = ({handleSearch, value, onChange, loading, enabled, setEnabled}) => {
+  
+  console.log('enabled', enabled)
   return (
     <div className="flex items-center">
       <form
@@ -39,7 +39,7 @@ const Search = ({handleSearch, value, onChange, loading}) => {
         </div>
       </form>
 
-      <div className="w-full text-sm sm:block hidden"><Switch
+      <div className="w-full text-sm sm:flex items-center hidden"><Switch
       checked={enabled}
       onChange={setEnabled}
       className={`${
@@ -52,7 +52,10 @@ const Search = ({handleSearch, value, onChange, loading}) => {
           enabled ? 'translate-x-6' : 'translate-x-1'
         } inline-block h-4 w-4 transform rounded-full bg-white`}
       />
-    </Switch></div>
+      
+    </Switch>
+    <span className="text-xs ml-2 font-semibold">Map view</span></div>
+    
     </div>
   )
 }

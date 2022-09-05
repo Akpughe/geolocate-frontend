@@ -51,6 +51,24 @@ select,
     '. .'
     '. .'
     '. .';
+
+    transition: transform .15s;
+}
+
+.card_container_map_off{
+  display: grid; 
+  grid-auto-columns: 1fr; 
+  grid-template-columns: 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 1fr; 
+  gap: 10px 30px; 
+  grid-template-areas: 
+    ". . . ."; 
+
+    transition: transform .15s;
+}
+
+.grid-trans{
+  transition: transform .15s;
 }
 
 .map-container {
