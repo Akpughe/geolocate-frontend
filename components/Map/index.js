@@ -33,7 +33,7 @@ const TheMap = ({ property }) => {
   return (
     <div className="map-container">
       {viewport.latitude && viewport.longitude && (
-        <div className="w-full h-[600px]">
+        <div className="w-full map">
           <Map
             mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
             initialViewState={viewport}

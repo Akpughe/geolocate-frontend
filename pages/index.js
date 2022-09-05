@@ -30,7 +30,7 @@ export default function Home({ property }) {
   const [currentData, setCurrentData] = useState();
   const [show, setShow] = useState(false);
 
-  const [enabled, setEnabled] = useState(true)
+  const [enabled, setEnabled] = useState(true);
 
   const getLocationFromGoogle = async (props) => {
     const { params, onFinish } = props;
@@ -175,7 +175,8 @@ export default function Home({ property }) {
   return (
     <>
       <Navbar />
-      <div className="relative w-full">
+      <div className="relative w-full mb-8">
+
         <Search
           handleSearch={(e) => handleSearch(e)}
           value={value}
@@ -215,7 +216,11 @@ export default function Home({ property }) {
         <div class="flex w-full space-x-10">
           <div class="">
             {/* card here */}
-            <div class={`${enabled ? `card_container` : `card_container_map_off`} sm:m-0 m-auto grid-trans `}>
+            <div
+              class={`${
+                enabled ? `card_container` : `card_container_map_off`
+              } sm:m-0 m-auto grid-trans `}
+            >
               {/* {products.length > 0 ? (
                 <h1 className="text-3xl font-bold mb-8">
                   {value} Real Estate {'&'} Homes For Sale
@@ -245,9 +250,16 @@ export default function Home({ property }) {
             </div>
           </div>
           {/* map */}
-          <div className={`map ${enabled ? 'flex justify-center h-full' : 'hidden'} `}>
-            
-           {products.length > 0 && <TheMap property={property} />}
+          <div
+            className={`map ${
+              enabled ? 'flex justify-center  relative' : 'hidden'
+            } `}
+          >
+            <div className="absolute">
+              <div className="fixed">
+                {products.length > 0 && <TheMap property={property} />}
+              </div>
+            </div>
           </div>
         </div>
       </div>
