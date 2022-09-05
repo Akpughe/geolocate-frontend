@@ -156,7 +156,7 @@ const CreateProperty = () => {
             type="text"
             name="bathroom"
             id="bathroom"
-            value={bedroom}
+            value={bathroom}
             onChange={(e) => handleChange(e)}
             placeholder="2"
           />
