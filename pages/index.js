@@ -172,11 +172,19 @@ export default function Home({ property }) {
   const optionsWrapperClassName =
     'absolute top-14 overflow-auto bg-white rounded-md shadow-dropdown max-h-60 focus:outline-none divide-y divide-secondary divide-opacity-10 w-[16.5375rem]';
 
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        return document.querySelector('.searchbar').classList.add('show');
+      }
+      return document.querySelector('.searchbar').classList.remove('show');
+    });
+  });
+
   return (
     <>
       <Navbar />
-      <div className="relative w-full mb-8">
-
+      <div className="searchbar relative w-full mb-8 bg-white">
         <Search
           handleSearch={(e) => handleSearch(e)}
           value={value}

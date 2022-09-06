@@ -10,16 +10,9 @@ const Search = ({
   setEnabled,
 }) => {
   console.log('enabled', enabled);
-  useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        return document.querySelector('.searchbar').classList.add('show');
-      }
-      return document.querySelector('.searchbar').classList.remove('show');
-    });
-  });
+  
   return (
-    <div className="searchbar flex items-center w-full bg-white">
+    <div className="flex items-center w-full bg-white">
       <form
         onSubmit={handleSearch}
         className="flex sm:space-x-4 space-x-2 items-center sm:px-10 px-5 w-full"
