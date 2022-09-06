@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import axios from 'axios';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
+import toast from 'react-hot-toast';
 
 const CreateProperty = () => {
   const {
@@ -29,6 +30,7 @@ const CreateProperty = () => {
     },
   });
   const [success, setSuccess] = useState('');
+  const [show, setShow] = useState(true);
 
   const {
     price,
@@ -50,6 +52,7 @@ const CreateProperty = () => {
         name: place.description,
       },
     });
+    setShow(false);
   };
 
   const handleChange = (e) => {
@@ -59,28 +62,45 @@ const CreateProperty = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await axios.post(
-      'http://localhost:4000/api/create-property',
-      formData
-    );
-    console.log(res.data);
-    setSuccess('sucessfully added');
-    setFormData({
-      price: '',
-      homeType: '',
-      bedroom: '',
-      bathroom: '',
-      yearBuilt: '',
-      sqft: '',
-      description: '',
-      address: {
-        placeId: '',
-        name: '',
-      },
-    });
+    try {
+      const res = await axios.post(
+        'http://localhost:4000/api/create-property',
+        formData
+      );
+      console.log(res.data);
+      setSuccess('sucessfully added');
+      setFormData({
+        price: '',
+        homeType: '',
+        bedroom: '',
+        bathroom: '',
+        yearBuilt: '',
+        sqft: '',
+        description: '',
+        address: {
+          placeId: '',
+          name: '',
+        },
+      });
+
+      toast.success('Property added successfully');
+    } catch (err) {
+      console.log(err);
+      toast.error('Error adding property');
+    }
   };
 
   console.log(formData);
+  const optionsWrapperClassName =
+    'absolute top-20 overflow-auto bg-white rounded-md shadow-dropdown max-h-60 focus:outline-none divide-y divide-secondary divide-opacity-10 w-[18rem]';
+  // useEffect(() => {
+  //   window.addEventListener('scroll', () => {
+  //     if (window.scrollY > 50) {
+  //       return document.querySelector('.searchbar').classList.add('show');
+  //     }
+  //     return document.querySelector('.searchbar').classList.remove('show');
+  //   });
+  // });
   return (
     <>
       <Navbar />
@@ -91,16 +111,46 @@ const CreateProperty = () => {
 
         <div class="mt-10 max-w-4xl">
           {/* <!-- form --> */}
-          <form class="flex flex-col items-start space-y-5" action="">
-            <label htmlFor="location" class="block w-72">
+          <form
+            class="flex flex-col items-start space-y-5"
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <label htmlFor="location" class="relative w-72">
               <span class="text-sm font-semibold"> Home address </span>
               <input
                 type="text"
-                name="location"
-                id="location"
+                name="address"
+                id="address"
+                value={address.name}
+                onChange={(evt) => {
+                  getPlacePredictions({
+                    input: evt.target.value,
+                    componentRestrictions: { country: 'ng' },
+                  });
+                  handleChange(evt);
+                }}
+                loading={isPlacePredictionsLoading}
                 placeholder="Location"
                 class="mt-2 w-full"
               />
+              <div className="">
+                <div className={`${optionsWrapperClassName} z-30 bg-gray-100 `}>
+                  {show &&
+                    placePredictions.map((item) => {
+                      console.log(item);
+                      return (
+                        <ul className="py-2 px-3 hover:bg-gray-50">
+                          <li
+                            onClick={() => handleSelect(item)}
+                            className=" cursor-pointer"
+                          >
+                            {item?.structured_formatting?.main_text}
+                          </li>
+                        </ul>
+                      );
+                    })}
+                </div>
+              </div>
             </label>
             <label htmlFor="price" class="block w-72">
               <span class="text-sm font-semibold"> Set your price </span>
@@ -108,6 +158,8 @@ const CreateProperty = () => {
                 type="text"
                 name="price"
                 id="price"
+                value={price}
+                onChange={(e) => handleChange(e)}
                 placeholder="Price"
                 class="mt-2 w-full"
               />
@@ -148,30 +200,69 @@ const CreateProperty = () => {
 
             <label htmlFor="homeType" class="block w-72">
               <span class="text-sm font-semibold"> Home type </span>
-              <select name="" id="" class="mt-2 w-full">
+              <select
+                onChange={(e) => handleChange(e)}
+                name="homeType"
+                class="mt-2 w-full"
+              >
                 <option disabled value="">
                   Select
                 </option>
-                <option value="">House</option>
-                <option value="">Apartment</option>
-                <option value="">Condo</option>
-                <option value="">Townhouse</option>
-                <option value="">Villa</option>
+                <option value="house">House</option>
+                <option value="apartment">Apartment</option>
+                <option value="condo">Condo</option>
+                <option value="townhouse">Townhouse</option>
+                <option value="villa">Villa</option>
               </select>
             </label>
 
             <div class="flex space-x-4">
               <label htmlFor="bedroom" class="block w-72">
                 <span class="text-sm font-semibold"> Bedrooms </span>
-                <input name="bedrooms" type="text" />
+                <input
+                  type="text"
+                  name="bedroom"
+                  id="bedroom"
+                  value={bedroom}
+                  onChange={(e) => handleChange(e)}
+                  placeholder="2"
+                />
               </label>
               <label htmlFor="bathroom" class="block w-72">
                 <span class="text-sm font-semibold"> Bathrooms </span>
-                <input name="bathroom" type="text" />
+                <input
+                  type="text"
+                  name="bathroom"
+                  id="bathroom"
+                  value={bathroom}
+                  onChange={(e) => handleChange(e)}
+                  placeholder="2"
+                />
               </label>
               <label htmlFor="sqft" class="block w-72">
                 <span class="text-sm font-semibold"> Sqft (Lot size) </span>
-                <input name="sqft" type="text" />
+                <input
+                  type="text"
+                  name="sqft"
+                  id="sqft"
+                  value={sqft}
+                  onChange={(e) => handleChange(e)}
+                  placeholder="800sqft"
+                />
+              </label>
+            </div>
+
+            <div class="flex w-full">
+              <label htmlFor="description" class="block w-full">
+                <span class="text-sm font-semibold"> Description </span>
+                <textarea
+                  type="text"
+                  name="description"
+                  id="description"
+                  value={description}
+                  onChange={(e) => handleChange(e)}
+                  placeholder=""
+                />
               </label>
             </div>
 
@@ -188,127 +279,6 @@ const CreateProperty = () => {
         </div>
       </main>
     </>
-
-    // <div>
-    //   <Link href="/">Home</Link>
-    //   {success}
-    //   <form onSubmit={(e) => handleSubmit(e)}>
-    //     <h1>Create Property</h1>
-
-    //     <label style={{ display: 'block' }} htmlFor="price">
-    //       price
-    //       <input
-    //         type="text"
-    //         name="price"
-    //         id="price"
-    //         value={price}
-    //         onChange={(e) => handleChange(e)}
-    //         placeholder="property price"
-    //       />
-    //     </label>
-
-    //     <div>
-    //       address
-    //       <input
-    //         type="text"
-    //         name="address"
-    //         id="address"
-    //         value={address.name}
-    //         placeholder="enter location"
-    //         onChange={(evt) => {
-    //           getPlacePredictions({
-    //             input: evt.target.value,
-    //             componentRestrictions: { country: 'ng' },
-    //           });
-    //           handleChange(evt);
-    //         }}
-    //         loading={isPlacePredictionsLoading}
-    //       />
-    //       {placePredictions.map((item) => {
-    //         // console.log(item);
-    //         return (
-    //           <ul>
-    //             <li onClick={() => handleSelect(item)}>
-    //               {item?.structured_formatting?.main_text}
-    //             </li>
-    //           </ul>
-    //         );
-    //       })}
-    //     </div>
-
-    //     <label style={{ display: 'block' }} htmlFor="homeType">
-    //       home type
-    //       <select onChange={(e) => handleChange(e)} name="homeType" id="">
-    //         <option value="">select home type</option>
-    //         <option value="apartment">apartment</option>
-    //         <option value="house">house</option>
-    //         <option value="condo">condo</option>
-    //       </select>
-    //     </label>
-
-    //     <label style={{ display: 'block' }} htmlFor="bedroom">
-    //       bedrooms
-    //       <input
-    //         type="text"
-    //         name="bedroom"
-    //         id="bedroom"
-    //         value={bedroom}
-    //         onChange={(e) => handleChange(e)}
-    //         placeholder="2"
-    //       />
-    //     </label>
-
-    //     <label style={{ display: 'block' }} htmlFor="bathroom">
-    //       bathrooms
-    //       <input
-    //         type="text"
-    //         name="bathroom"
-    //         id="bathroom"
-    //         value={bathroom}
-    //         onChange={(e) => handleChange(e)}
-    //         placeholder="2"
-    //       />
-    //     </label>
-
-    //     <label style={{ display: 'block' }} htmlFor="sqft">
-    //       Square feet (sqft)
-    //       <input
-    //         type="text"
-    //         name="sqft"
-    //         id="sqft"
-    //         value={sqft}
-    //         onChange={(e) => handleChange(e)}
-    //         placeholder="800sqft"
-    //       />
-    //     </label>
-
-    //     <label style={{ display: 'block' }} htmlFor="yearBuilt">
-    //       year built
-    //       <input
-    //         type="text"
-    //         name="yearBuilt"
-    //         id="yearBuilt"
-    //         value={yearBuilt}
-    //         onChange={(e) => handleChange(e)}
-    //         placeholder="2013"
-    //       />
-    //     </label>
-
-    //     <label style={{ display: 'block' }} htmlFor="description">
-    //       description
-    //       <input
-    //         type="text"
-    //         name="description"
-    //         id="description"
-    //         value={description}
-    //         onChange={(e) => handleChange(e)}
-    //         placeholder=""
-    //       />
-    //     </label>
-
-    //     <button type="submit">Submit</button>
-    //   </form>
-    // </div>
   );
 };
 
