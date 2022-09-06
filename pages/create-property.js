@@ -104,19 +104,19 @@ const CreateProperty = () => {
   return (
     <>
       <Navbar />
-      <main class="sm:px-10 px-5 py-10 w-full">
+      <main className="sm:px-10 px-5 py-10 w-full">
         <div>
-          <h1 class="font-bold text-4xl">Let&#39;s help you sell a home</h1>
+          <h1 className="font-bold text-4xl">Let&#39;s help you sell a home</h1>
         </div>
 
-        <div class="mt-10 max-w-4xl">
+        <div className="mt-10 max-w-4xl">
           {/* <!-- form --> */}
           <form
-            class="flex flex-col items-start space-y-5"
+            className="flex flex-col items-start space-y-5"
             onSubmit={(e) => handleSubmit(e)}
           >
-            <label htmlFor="location" class="relative w-72">
-              <span class="text-sm font-semibold"> Home address </span>
+            <label htmlFor="location" className="relative w-72">
+              <span className="text-sm font-semibold"> Home address </span>
               <input
                 type="text"
                 name="address"
@@ -131,7 +131,7 @@ const CreateProperty = () => {
                 }}
                 loading={isPlacePredictionsLoading}
                 placeholder="Location"
-                class="mt-2 w-full"
+                className="mt-2 w-full"
               />
               <div className="">
                 <div className={`${optionsWrapperClassName} z-30 bg-gray-100 `}>
@@ -139,7 +139,7 @@ const CreateProperty = () => {
                     placePredictions.map((item) => {
                       console.log(item);
                       return (
-                        <ul className="py-2 px-3 hover:bg-gray-50">
+                        <ul key={item} className="py-2 px-3 hover:bg-gray-50">
                           <li
                             onClick={() => handleSelect(item)}
                             className=" cursor-pointer"
@@ -152,8 +152,8 @@ const CreateProperty = () => {
                 </div>
               </div>
             </label>
-            <label htmlFor="price" class="block w-72">
-              <span class="text-sm font-semibold"> Set your price </span>
+            <label htmlFor="price" className="block w-72">
+              <span className="text-sm font-semibold"> Set your price </span>
               <input
                 type="text"
                 name="price"
@@ -161,16 +161,19 @@ const CreateProperty = () => {
                 value={price}
                 onChange={(e) => handleChange(e)}
                 placeholder="Price"
-                class="mt-2 w-full"
+                className="mt-2 w-full"
               />
             </label>
 
-            <label htmlFor="dropzone-file" class="block w-full cursor-pointer">
-              <span class="text-sm font-semibold"> Upload images </span>
+            <label
+              htmlFor="dropzone-file"
+              className="block w-full cursor-pointer"
+            >
+              <span className="text-sm font-semibold"> Upload images </span>
 
-              <div class="flex flex-col justify-center items-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md-2 mt-2">
+              <div className="flex flex-col justify-center items-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md-2 mt-2">
                 <svg
-                  class="mb-3 w-10 h-10 text-gray-400"
+                  className="mb-3 w-10 h-10 text-gray-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -183,27 +186,30 @@ const CreateProperty = () => {
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                   ></path>
                 </svg>
-                <p class="mb-2 text-xs text-gray-500">
-                  <span class="font-semibold"> Click to upload images. </span>
+                <p className="mb-2 text-xs text-gray-500">
+                  <span className="font-semibold">
+                    {' '}
+                    Click to upload images.{' '}
+                  </span>
                 </p>
-                <p class="text-xs text-gray-500">PNG, JPG, JPEG</p>
+                <p className="text-xs text-gray-500">PNG, JPG, JPEG</p>
               </div>
               <input
                 id="dropzone-file"
                 type="file"
                 name="images"
-                class="hidden"
+                className="hidden"
               />
             </label>
 
-            <p class="font-semibold text-2xl py-5">Home Details</p>
+            <p className="font-semibold text-2xl py-5">Home Details</p>
 
-            <label htmlFor="homeType" class="block w-72">
-              <span class="text-sm font-semibold"> Home type </span>
+            <label htmlFor="homeType" className="block w-72">
+              <span className="text-sm font-semibold"> Home type </span>
               <select
                 onChange={(e) => handleChange(e)}
                 name="homeType"
-                class="mt-2 w-full"
+                className="mt-2 w-full"
               >
                 <option disabled value="">
                   Select
@@ -216,9 +222,9 @@ const CreateProperty = () => {
               </select>
             </label>
 
-            <div class="flex space-x-4">
-              <label htmlFor="bedroom" class="block w-72">
-                <span class="text-sm font-semibold"> Bedrooms </span>
+            <div className="flex space-x-4">
+              <label htmlFor="bedroom" className="block w-72">
+                <span className="text-sm font-semibold"> Bedrooms </span>
                 <input
                   type="text"
                   name="bedroom"
@@ -228,8 +234,8 @@ const CreateProperty = () => {
                   placeholder="2"
                 />
               </label>
-              <label htmlFor="bathroom" class="block w-72">
-                <span class="text-sm font-semibold"> Bathrooms </span>
+              <label htmlFor="bathroom" className="block w-72">
+                <span className="text-sm font-semibold"> Bathrooms </span>
                 <input
                   type="text"
                   name="bathroom"
@@ -239,8 +245,8 @@ const CreateProperty = () => {
                   placeholder="2"
                 />
               </label>
-              <label htmlFor="sqft" class="block w-72">
-                <span class="text-sm font-semibold"> Sqft (Lot size) </span>
+              <label htmlFor="sqft" className="block w-72">
+                <span className="text-sm font-semibold"> Sqft (Lot size) </span>
                 <input
                   type="text"
                   name="sqft"
@@ -252,9 +258,9 @@ const CreateProperty = () => {
               </label>
             </div>
 
-            <div class="flex w-full">
-              <label htmlFor="description" class="block w-full">
-                <span class="text-sm font-semibold"> Description </span>
+            <div className="flex w-full">
+              <label htmlFor="description" className="block w-full">
+                <span className="text-sm font-semibold"> Description </span>
                 <textarea
                   type="text"
                   name="description"
@@ -266,10 +272,10 @@ const CreateProperty = () => {
               </label>
             </div>
 
-            <div class="flex justify-end w-full">
+            <div className="flex justify-end w-full">
               <button
                 type="submit"
-                class="bg-blue-500 px-8 py-3 rounded-md text-white font-semibold"
+                className="bg-blue-500 px-8 py-3 rounded-md text-white font-semibold"
               >
                 Submit
               </button>

@@ -38,7 +38,7 @@ const Search = () => {
       {placePredictions.map((item) => {
         console.log(item);
         return (
-          <ul>
+          <ul key={item}>
             <li>{item?.structured_formatting?.main_text}</li>
           </ul>
         );

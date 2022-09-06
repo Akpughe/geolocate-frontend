@@ -206,7 +206,7 @@ export default function Home({ property }) {
               placePredictions.map((item) => {
                 console.log(item);
                 return (
-                  <ul className="py-2 px-3 hover:bg-gray-50">
+                  <ul key={item} className="py-2 px-3 hover:bg-gray-50">
                     <li
                       onClick={() => handleSelect(item)}
                       className=" cursor-pointer"
@@ -221,11 +221,11 @@ export default function Home({ property }) {
       </div>
 
       <div className="sm:px-10 px-5 py-10 w-full">
-        <div class="flex w-full space-x-10">
-          <div class="">
+        <div className="flex w-full space-x-10">
+          <div className="">
             {/* card here */}
             <div
-              class={`${
+              className={`${
                 enabled ? `card_container` : `card_container_map_off`
               } sm:m-0 m-auto grid-trans `}
             >
@@ -244,7 +244,7 @@ export default function Home({ property }) {
                   let id = item._id;
                   // console.log(value);
                   return (
-                    <div className="">
+                    <div key={id} className="">
                       <PropertyCard
                         key={item._id}
                         {...products}
