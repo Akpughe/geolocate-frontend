@@ -119,7 +119,7 @@ export const getServerSideProps = async ({ params }) => {
   let property;
   // get pro on build
   const { data } = await axios.get(
-    `http://localhost:4000/api/get-property/${params.id}`
+    `https://geolocate-backend-production.up.railway.app/api/get-property/${params.id}`
   );
   property = data;
 

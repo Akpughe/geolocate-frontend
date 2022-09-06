@@ -64,7 +64,7 @@ const CreateProperty = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:4000/api/create-property',
+        'https://geolocate-backend-production.up.railway.app/api/create-property',
         formData
       );
       console.log(res.data);
