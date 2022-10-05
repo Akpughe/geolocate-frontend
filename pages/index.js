@@ -125,7 +125,7 @@ export default function Home({ property }) {
     });
 
     const res = await axios.get(
-      `https://geolocate-backend-production.up.railway.app/api/search-property?q=${value}&longitude=${currentLng}&latitude=${currentLat}`
+      `https://geolocate-backend-production-15ee.up.railway.app/api/search-property?q=${value}&longitude=${currentLng}&latitude=${currentLat}`
     );
 
     setProducts(res.data);
@@ -279,7 +279,7 @@ export const getServerSideProps = async ({ params }) => {
   let property;
   // get pro on build
   const { data } = await axios.get(
-    `https://geolocate-backend-production.up.railway.app/api/get-property`
+    `https://geolocate-backend-production-15ee.up.railway.app/api/get-property`
   );
   property = data;
 
