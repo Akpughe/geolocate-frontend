@@ -12,7 +12,7 @@ const CreateProperty = () => {
     getPlacePredictions,
     isPlacePredictionsLoading,
   } = usePlacesService({
-    apiKey: 'AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0',
+    apiKey: process.env.NEXT_GOOGLE_API_KEY,
   });
   //   select a place from the list of predictions
   const [selectedPlace, setSelectedPlace] = useState(null);
@@ -65,6 +65,7 @@ const CreateProperty = () => {
     try {
       const res = await axios.post(
         'https://geolocate-backend-production-15ee.up.railway.app/api/create-property',
+        // 'http://localhost:4000/api/create-property',
         formData
       );
       console.log(res.data);

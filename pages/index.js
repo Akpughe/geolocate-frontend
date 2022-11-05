@@ -10,7 +10,7 @@ import TheMap from '../components/Map';
 import GoogleMapReact from 'google-map-react';
 import { FaMapMarker } from 'react-icons/fa';
 
-const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0`;
+const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.NEXT_GOOGLE_API_KEY}`;
 
 export default function Home({ property }) {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function Home({ property }) {
     getPlacePredictions,
     isPlacePredictionsLoading,
   } = usePlacesService({
-    apiKey: 'AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0',
+    apiKey: process.env.NEXT_GOOGLE_API_KEY,
   });
   const [value, setValue] = useState('');
   const [location, setLocation] = useState('');
@@ -126,6 +126,7 @@ export default function Home({ property }) {
 
     const res = await axios.get(
       `https://geolocate-backend-production-15ee.up.railway.app/api/search-property?q=${value}&longitude=${currentLng}&latitude=${currentLat}`
+      // `http://localhost:4000/api/search-property?q=${value}&longitude=${currentLng}&latitude=${currentLat}`
     );
 
     setProducts(res.data);
@@ -280,6 +281,7 @@ export const getServerSideProps = async ({ params }) => {
   // get pro on build
   const { data } = await axios.get(
     `https://geolocate-backend-production-15ee.up.railway.app/api/get-property`
+    // `http://localhost:4000/api/get-property`
   );
   property = data;
 

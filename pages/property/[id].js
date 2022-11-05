@@ -8,7 +8,7 @@ import { MdArrowBackIosNew, MdFavoriteBorder } from 'react-icons/md';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import Navbar from '../../components/Navbar';
 import { useRouter } from 'next/router';
-const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC9WeMRFmFpLH4ED2zp4LG0PfPsI5r1aj0`;
+const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.NEXT_GOOGLE_API_KEY}`;
 
 const Marker = (props) => {
   return <div className="SuperAwesomePin">pin</div>;
@@ -193,9 +193,17 @@ const Property = ({ property }) => {
             </div>
           </div>
 
-          <div>
+          <div className="">
             <h3 className="text-xl font-bold">Overview</h3>
             <p className="text-base tracking-wide">{property.description}</p>
+          </div>
+          <hr />
+          <div>Listed by:</div>
+
+          <div className='items-end'>
+            <h4 className="text-xl font-bold">Contact agent</h4>
+            <p className="text-sm">Sam McDee - Sales Representative</p>
+            <a className="text-sm" href="tel:+2349055936918">2349055936918</a>
           </div>
         </div>
       </div>
@@ -207,8 +215,8 @@ export const getServerSideProps = async ({ params }) => {
   let property;
   // get pro on build
   const { data } = await axios.get(
-    // `https://geolocate-backend-production-15ee.up.railway.app/api/get-property/${params.id}`
-    `http://localhost:4000/api/get-property/${params.id}`
+    `https://geolocate-backend-production-15ee.up.railway.app/api/get-property/${params.id}`
+    // `http://localhost:4000/api/get-property/${params.id}`
   );
   property = data;
 
