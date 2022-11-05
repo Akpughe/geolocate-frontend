@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import toast from 'react-hot-toast';
 
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+
 const CreateProperty = () => {
   const {
     placesService,
@@ -12,7 +14,7 @@ const CreateProperty = () => {
     getPlacePredictions,
     isPlacePredictionsLoading,
   } = usePlacesService({
-    apiKey: process.env.NEXT_GOOGLE_API_KEY,
+    apiKey: API_KEY,
   });
   //   select a place from the list of predictions
   const [selectedPlace, setSelectedPlace] = useState(null);

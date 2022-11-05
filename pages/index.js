@@ -10,10 +10,12 @@ import TheMap from '../components/Map';
 import GoogleMapReact from 'google-map-react';
 import { FaMapMarker } from 'react-icons/fa';
 
-const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.NEXT_GOOGLE_API_KEY}`;
-
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=${API_KEY}`;
+// const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDL_uYuGa27cy-fY5eAA-oauSZZmevnTuQ`;
 export default function Home({ property }) {
   const router = useRouter();
+  console.log('env', API_KEY)
   console.log('properties', property);
   const {
     placesService,
@@ -21,7 +23,8 @@ export default function Home({ property }) {
     getPlacePredictions,
     isPlacePredictionsLoading,
   } = usePlacesService({
-    apiKey: process.env.NEXT_GOOGLE_API_KEY,
+    // apiKey: process.env.NEXT_GOOGLE_API_KEY,
+    apiKey: API_KEY,
   });
   const [value, setValue] = useState('');
   const [location, setLocation] = useState('');

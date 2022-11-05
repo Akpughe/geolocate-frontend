@@ -8,7 +8,9 @@ import { MdArrowBackIosNew, MdFavoriteBorder } from 'react-icons/md';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import Navbar from '../../components/Navbar';
 import { useRouter } from 'next/router';
-const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.NEXT_GOOGLE_API_KEY}`;
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+
+const GOOGLE_GEOCODE_API = `https://maps.googleapis.com/maps/api/geocode/json?key=${API_KEY}`;
 
 const Marker = (props) => {
   return <div className="SuperAwesomePin">pin</div>;
