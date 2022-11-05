@@ -91,7 +91,8 @@ const Navbar = () => {
           My favourites
         </div>
         <div
-          onClick={addPropertyLink}
+          // onClick={addPropertyLink}
+          onClick={() => router.push('/create-property')}
           className="text-sm font-semibold cursor-pointer"
         >
           Add Property
